@@ -4,7 +4,7 @@ from aiogram.filters import Command
 from data_aggregator import DataAggregator
 
 # Токен
-BOT_TOKEN = '7051604261:AAGGg5L4iky8yqZbCq--o8W-ZniqvhYXEXI'
+BOT_TOKEN = '...'
 
 # Создаем объекты бота и диспетчера
 bot = Bot(token=BOT_TOKEN)
@@ -21,7 +21,7 @@ async def process_json(message: types.Message):
     try:
         received_json = json.loads(message.text)
         out_data = DataAggregator(received_json)
-        await message.answer(text=out_data.get_result_data())
+        await message.answer(text=await out_data.get_result_data())
 
     except:
         await message.answer(text='Невалидный запрос. Пример запроса: "{dt_from": "2022-09-01T00:00:00", "dt_upto": '
