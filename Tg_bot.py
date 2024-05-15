@@ -21,7 +21,7 @@ async def process_json(message: types.Message):
     try:
         received_json = json.loads(message.text)
         out_data = DataAggregator(received_json)
-        await message.answer(text=await out_data.get_result_data())
+        await message.answer(text=out_data.get_result_data())
 
     except:
         await message.answer(text='Невалидный запрос. Пример запроса: "{dt_from": "2022-09-01T00:00:00", "dt_upto": '

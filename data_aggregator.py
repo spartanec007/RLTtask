@@ -1,8 +1,7 @@
+from pymongo import MongoClient
 from datetime import datetime, timedelta
 import json
 from dateutil.relativedelta import relativedelta
-import asyncio
-import motor.motor_asyncio
 
 
 class DataAggregator:
@@ -13,8 +12,8 @@ class DataAggregator:
         self.group_type = dt["group_type"]
         self.result = None
 
-    async def aggregate_salary_data(self):
-        client = motor.motor_asyncio.AsyncIOMotorClient('localhost', 27017)  # Подставьте свои данные для подключения
+    def aggregate_salary_data(self):
+        client = MongoClient('localhost', 27017)  # Подставьте свои данные для подключения
         db = client['RLTbase']
         collection = db['RLTbase']
 
@@ -38,11 +37,10 @@ class DataAggregator:
             }
         ]
 
-        cursor = collection.aggregate(pipeline)
-        self.result = await cursor.to_list(length=None)
+        self.result = collection.aggregate(pipeline)
 
-    async def get_result_data(self):
-        await self.aggregate_salary_data()
+    def get_result_data(self):
+        self.aggregate_salary_data()
         dataset_dict = {}  # Словарь, где ключи есть объекты datetime с интервалом "group_type"
         labels = []  # Список с промежуточными значениями дат.
         labels_iso = []  # Список с датами, преобразованными в ISO формат.
@@ -84,3 +82,4 @@ class DataAggregator:
         json_data = json.dumps({"dataset": dataset, "labels": labels_iso})
 
         return json_data
+
